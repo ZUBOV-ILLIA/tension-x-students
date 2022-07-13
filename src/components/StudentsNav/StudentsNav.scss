@@ -1,0 +1,65 @@
+.students_nav {
+  height: 60px;
+}
+
+.nav {
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  &__school {
+    display: flex;
+  }
+
+  &__list {
+    display: flex;
+    justify-content: space-between;
+    list-style: none;
+  }
+
+  &__item {
+    margin-right: 16px;
+
+    &--active {
+      background-color: #A6192E;
+    }
+  }
+
+  &__link {
+    padding: 5px 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 14px;
+    background-color: transparent;
+
+    transition:
+      background-color 0.3s,
+      color 0.3s;
+
+    &:hover {
+      background-color: #A6192E;
+      color: #fff;
+    }
+  }
+
+  &__link-content {
+    margin-right: 8px;
+  }
+
+  &__user {
+    display: flex;
+  }
+}
+
+.header__link {
+  color: #777;
+
+  &--active {
+    font-weight: 700;
+    color: #fff;
+  }
+}

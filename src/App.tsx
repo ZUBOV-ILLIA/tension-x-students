@@ -1,9 +1,12 @@
 import React from 'react';
-import './App.css';
+import './App.scss';
+import { Students } from './components/Students';
 
 const App: React.FC = () => {
   return (
-    <h1>asfd</h1>
+    <>
+      <Students />
+    </>
   );
 }
 
