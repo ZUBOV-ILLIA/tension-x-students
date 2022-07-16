@@ -1,27 +1,23 @@
 /// <reference types="react-scripts" />
 
 export interface State {
-  data: StateData,
-  totalCount: number,
-  totalPages: number,
+  mainData: StateData
 }
 
 export interface StateData {
-  [key: string]: Student[]
+  data: Student[]
+  totalCount: number,
+  totalPages: number,
 }
 
 export interface Student {
   class: string,
   id: number,
   name: string,
-  parents: Parents[],
+  parents: string[],
   score: string,
   speed: string,
   tests: Tests[],
-}
-
-export interface Parents {
-  [key: number]: string,
 }
 
 export interface Tests {

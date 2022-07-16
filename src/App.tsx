@@ -4,9 +4,9 @@ import { Students } from './components/Students';
 
 const App: React.FC = () => {
   return (
-    <>
+    <div className="base">
       <Students />
-    </>
+    </div>
   );
 }
 

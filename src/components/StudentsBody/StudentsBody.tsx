@@ -4,9 +4,9 @@ import { BodyMain } from "../BodyMain";
 
 export const StudentsBody: React.FC = () => {
   return (
-    <body className="body">
+    <div className="body">
       <BodyHeader />
       <BodyMain />
-    </body>
+    </div>
   );
 }

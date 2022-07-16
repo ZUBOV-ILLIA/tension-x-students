@@ -1,3 +1,3 @@
 import { State } from "../react-app-env";
 
-export const getStudentsSelector = (state: State) => state;
+export const getStudentsSelector = (state: State) => state.mainData.data;

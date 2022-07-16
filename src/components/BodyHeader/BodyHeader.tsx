@@ -3,7 +3,7 @@ import './BodyHeader.scss';
 
 export const BodyHeader: React.FC = () => {
   return (
-    <header className="header body__header">
+    <header className="body-header">
       <nav className="nav students_nav body__nav">
         <ul className="nav__list">
           <li className="nav__item">
