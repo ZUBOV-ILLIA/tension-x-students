@@ -140,6 +140,11 @@
     flex-grow: 1;
   }
 
+  &__header-arrow {
+    transform: rotateZ(180deg);
+    transition: transform 0.4s linear;
+  }
+
   &__row {
     margin-right: 24px;
     height: 48px;
@@ -151,7 +156,7 @@
   }
 
   &__details {
-    height: min-content;
+    height: 0;
   }
 
   &__pages {
@@ -191,10 +196,13 @@
 }
 
 .details {
-  padding: 20px 60px;
   overflow: hidden;
   background-color: #F2F2F2;
-
+  transition: 0.4s linear;
+  
+  &__inner {
+    padding: 20px 60px;
+  }
 
   &__student {
     margin-bottom: 12px;

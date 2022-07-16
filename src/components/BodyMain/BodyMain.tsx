@@ -142,18 +142,26 @@ export const BodyMain: React.FC = () => {
               </a>
             </div>
 
-            {/*               ==============================               */}
-
-
             {students.map((student: Student) => (
-              <>
+              <React.Fragment key={student.id}>
                 <div
                   className="
                     body-main__header-row
                     body-main__person"
-                  key={student.id}
                   onClick={() => {
+                    const el = document.getElementById(student.id.toString());
+                    const arrow = document.getElementById(`arrow-${student.id}`);
 
+                    if (el && arrow) {
+                      console.log(el.style.height);
+                      if (el.style.height === '0px') {
+                        el.style.height = `${252 + 35 * student.tests.length}px`;
+                        arrow.style.transform = 'rotateZ(180deg)';
+                      } else {
+                        el.style.height = '0'
+                        arrow.style.transform = 'rotateZ(0)';
+                      }
+                    }
                   }}
                 >
                   <div
@@ -239,171 +247,184 @@ export const BodyMain: React.FC = () => {
                       </span>
                     </div>
 
-                    <img src="./images/arrow_down.png" alt="button" />
+                    <img
+                      className="body-main__header-arrow"
+                      id={`arrow-${student.id}`}
+                      src="./images/arrow_down.png" alt="button"
+                      style={{
+                        transform: 'rotateZ(0)',
+                      }}
+                    />
                   </span>
                 </div>
 
-                <div className="body-main__details details">
-
-                  <div className="details__student">
-                    <h3 className="details__title">Student</h3>
-                    <span className="details__subtitle">{student.name}</span>
-                    <h3 className="details__title">id</h3>
-                    <span className="details__subtitle">{student.id}</span>
-                  </div>
-
-                  <div className="details__selectors-block">
-                    <div className="details__selector">
-                      <span className="details__selector-name">all concepts</span>
-                      <img src="./images/arrow_down.png" alt="button" />
-                    </div>
-                    <div className="details__selector">
-                      <span className="details__selector-name">all score</span>
-                      <img src="./images/arrow_down.png" alt="button" />
-                    </div>
-                    <div className="details__selector">
-                      <span className="details__selector-name">all speed</span>
-                      <img src="./images/arrow_down.png" alt="button" />
+                <div
+                  id={`${student.id}`}
+                  className="body-main__details details"
+                  style={{
+                    height: 0,
+                  }}
+                >
+                  <div className="details__inner">
+                    <div className="details__student">
+                      <h3 className="details__title">Student</h3>
+                      <span className="details__subtitle">{student.name}</span>
+                      <h3 className="details__title">id</h3>
+                      <span className="details__subtitle">{student.id}</span>
                     </div>
 
-                    <div className="details__calendar">
-                      <h4 className="details__calendar-title">
-                        Select Period
-                      </h4>
+                    <div className="details__selectors-block">
+                      <div className="details__selector">
+                        <span className="details__selector-name">all concepts</span>
+                        <img src="./images/arrow_down.png" alt="button" />
+                      </div>
+                      <div className="details__selector">
+                        <span className="details__selector-name">all score</span>
+                        <img src="./images/arrow_down.png" alt="button" />
+                      </div>
+                      <div className="details__selector">
+                        <span className="details__selector-name">all speed</span>
+                        <img src="./images/arrow_down.png" alt="button" />
+                      </div>
 
-                      <img src="./images/calendar.svg" alt="" />
+                      <div className="details__calendar">
+                        <h4 className="details__calendar-title">
+                          Select Period
+                        </h4>
+
+                        <img src="./images/calendar.svg" alt="" />
+                      </div>
+
+                      <img src="./images/refresh.svg" alt="" />
                     </div>
 
-                    <img src="./images/refresh.svg" alt="" />
-                  </div>
+                    <div className="details__abylitys-row">
+                      <div className="details__abylity-row">
+                        <p className="details__abylity-text">score</p>
 
-                  <div className="details__abylitys-row">
-                    <div className="details__abylity-row">
-                      <p className="details__abylity-text">score</p>
+                        <div className="details__abylity-circle color__bgc--blue"></div>
+                        <p className="details__abylity-text color__color--blue">90%+ Acuracy</p>
 
-                      <div className="details__abylity-circle color__bgc--blue"></div>
-                      <p className="details__abylity-text color__color--blue">90%+ Acuracy</p>
+                        <div className="details__abylity-circle color__bgc--green"></div>
+                        <p className="details__abylity-text color__color--green">80 - 89% ACCURACY</p>
 
-                      <div className="details__abylity-circle color__bgc--green"></div>
-                      <p className="details__abylity-text color__color--green">80 - 89% ACCURACY</p>
+                        <div className="details__abylity-circle color__bgc--orange"></div>
+                        <p className="details__abylity-text color__color--orange">50 - 79% ACCURACY</p>
 
-                      <div className="details__abylity-circle color__bgc--orange"></div>
-                      <p className="details__abylity-text color__color--orange">50 - 79% ACCURACY</p>
+                        <div className="details__abylity-circle color__bgc--red"></div>
+                        <p className="details__abylity-text color__color--red">BELOW 50% ACCURACY</p>
+                      </div>
 
-                      <div className="details__abylity-circle color__bgc--red"></div>
-                      <p className="details__abylity-text color__color--red">BELOW 50% ACCURACY</p>
+                      <div className="details__abylity-row">
+                        <p className="details__abylity-text">speed</p>
+
+                        <div className="details__abylity-circle color__bgc--blue"></div>
+                        <p className="details__abylity-text color__color--blue">ABOVE EXPECTED</p>
+
+                        <div className="details__abylity-circle color__bgc--green"></div>
+                        <p className="details__abylity-text color__color--green">AS EXPECTED</p>
+
+                        <div className="details__abylity-circle color__bgc--red"></div>
+                        <p className="details__abylity-text color__color--red">BELOW EXPECTED</p>
+                      </div>
                     </div>
 
-                    <div className="details__abylity-row">
-                      <p className="details__abylity-text">speed</p>
-
-                      <div className="details__abylity-circle color__bgc--blue"></div>
-                      <p className="details__abylity-text color__color--blue">ABOVE EXPECTED</p>
-
-                      <div className="details__abylity-circle color__bgc--green"></div>
-                      <p className="details__abylity-text color__color--green">AS EXPECTED</p>
-
-                      <div className="details__abylity-circle color__bgc--red"></div>
-                      <p className="details__abylity-text color__color--red">BELOW EXPECTED</p>
-                    </div>
-                  </div>
-
-                  <div className="details__more-container">
-                    <div className="details__more-row">
-                      <p className="details__id">
-                        #
-                      </p>
-
-                      <p className="details__test">
-                        Test Label
-                      </p>
-
-                      <p className="details__score">
-                        Score
-                      </p>
-
-                      <p className="details__speed">
-                        Speed
-                      </p>
-
-                      <p className="details__total">
-                        Total Q-ns
-                      </p>
-
-                      <p className="details__exp">
-                        Exp. Speed
-                      </p>
-
-                      <p className="details__concept">
-                        Concept
-                      </p>
-
-                      <p className="details__date">
-                        Date
-                      </p>
-
-                      <p className="details__absent">
-                        Absent
-                      </p>
-                    </div>
-
-                    {student.tests.map((test, index) => (
-                      <div
-                        key={index}
-                        className="
-                          details__more-row
-                          details__more-user-row"
-                      >
+                    <div className="details__more-container">
+                      <div className="details__more-row">
                         <p className="details__id">
-                          {index + 1}
+                          #
                         </p>
 
                         <p className="details__test">
-                          Finding Averages {test.label.split(' ')[1]}
+                          Test Label
                         </p>
 
-                        <p className={`details__score ${!!test.score && 'color__color--blue'}`}>
-                          {test.score || 'NIL'}
+                        <p className="details__score">
+                          Score
                         </p>
 
-                        <p className={`details__speed ${!!test.speed && 'color__color--blue'}`}>
-                          {test.speed || 'NIL'}
+                        <p className="details__speed">
+                          Speed
                         </p>
 
                         <p className="details__total">
-                          {test.total}
+                          Total Q-ns
                         </p>
 
                         <p className="details__exp">
-                          {test.expSpeed}
+                          Exp. Speed
                         </p>
 
                         <p className="details__concept">
-                          {test.concept}
+                          Concept
                         </p>
 
                         <p className="details__date">
-                          {test.date}
+                          Date
                         </p>
 
-                        <div className="details__absent">
-                          <input
-                            type="checkbox"
-                            defaultChecked={test.absent}
-                          />
-                        </div>
+                        <p className="details__absent">
+                          Absent
+                        </p>
                       </div>
-                    ))}
 
-                  </div>
+                      {student.tests.map((test, index) => (
+                        <div
+                          key={index}
+                          className="
+                          details__more-row
+                          details__more-user-row"
+                        >
+                          <p className="details__id">
+                            {index + 1}
+                          </p>
 
-                  <div className="details__average">
-                    <p className="details__average-title">
-                      Average
-                    </p>
+                          <p className="details__test">
+                            Finding Averages {test.label.split(' ')[1]}
+                          </p>
 
-                    <p
-                      className={`
+                          <p className={`details__score ${!!test.score && 'color__color--blue'}`}>
+                            {test.score || 'NIL'}
+                          </p>
+
+                          <p className={`details__speed ${!!test.speed && 'color__color--blue'}`}>
+                            {test.speed || 'NIL'}
+                          </p>
+
+                          <p className="details__total">
+                            {test.total}
+                          </p>
+
+                          <p className="details__exp">
+                            {test.expSpeed}
+                          </p>
+
+                          <p className="details__concept">
+                            {test.concept}
+                          </p>
+
+                          <p className="details__date">
+                            {test.date}
+                          </p>
+
+                          <div className="details__absent">
+                            <input
+                              type="checkbox"
+                              defaultChecked={test.absent}
+                            />
+                          </div>
+                        </div>
+                      ))}
+
+                    </div>
+
+                    <div className="details__average">
+                      <p className="details__average-title">
+                        Average
+                      </p>
+
+                      <p
+                        className={`
                         details__average-sore
                         color__color--blue
                         ${+student.score.slice(0, -1) < 50 && 'color__color--red'}
@@ -412,23 +433,23 @@ export const BodyMain: React.FC = () => {
                         ${(+student.score.slice(0, -1) >= 80)
                           && (+student.score.slice(0, -1) < 90) && 'color__color--green'}
                         ${+student.score.slice(0, -1) >= 90 && 'color__color--blue'}`}
-                    >
-                      {student.score}
-                    </p>
+                      >
+                        {student.score}
+                      </p>
 
-                    <p
-                      className={`
+                      <p
+                        className={`
                         details__average-speed color__color--blue
                         ${student.speed === 'Below Expected' && 'color__color--red'}
                         ${student.speed === 'As Expected' && 'color__color--green'}
                         ${student.speed === 'Above Expected' && 'color__color--blue'}`}
-                    >
-                      {student.speed}
-                    </p>
+                      >
+                        {student.speed}
+                      </p>
+                    </div>
                   </div>
-
                 </div>
-              </>
+              </React.Fragment>
             ))}
 
 
@@ -452,6 +473,6 @@ export const BodyMain: React.FC = () => {
           </div>
         </div>
       </div>
-    </main>
+    </main >
   );
 }
