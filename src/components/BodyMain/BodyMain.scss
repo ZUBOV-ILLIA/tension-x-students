@@ -68,8 +68,13 @@
 
   &__person {
     background-color: #fff;
-
+    cursor: pointer;
+    
     transition: background-color 0.3s linear;
+    
+    &:first-child {
+      background-color: rgb(253, 8, 8);
+    }
 
     &:hover {
       background-color: #e9e9e9;
@@ -89,12 +94,13 @@
     text-decoration: none;
     font-size: 14px;
     color: #777;
-    background-color: transparent;
+    border-bottom: 1px solid transparent;
+    cursor: pointer;
 
-    transition: background-color 0.3s linear;
+    transition: border 0.3s linear;
 
     &:hover {
-      background-color: #e9e9e9;
+      border-bottom: 1px solid #777;
     }
   }
 
@@ -192,8 +198,16 @@
 
   &__arrow {
     cursor: pointer;
+    transition: transform 0.3s linear;
+    
+    &:hover {
+      transform: scale(1.2);
+    }
   }
 }
+
+// fill="none"
+// fill="#5B5B5B"
 
 .details {
   overflow: hidden;

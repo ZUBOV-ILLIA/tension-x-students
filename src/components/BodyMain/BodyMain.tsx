@@ -1,18 +1,24 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getStudents } from "../../api/students";
 import { Student } from "../../react-app-env";
 import { setUsersAction } from "../../store";
-import { getStudentsSelector } from "../../store/selectors";
+import { getCountSelector, getStudentsSelector } from "../../store/selectors";
 import './BodyMain.scss';
 
 export const BodyMain: React.FC = () => {
   const dispatch = useDispatch();
   const students: Student[] = useSelector(getStudentsSelector);
+  const totalCount = useSelector(getCountSelector);
+
+  const [rows, setRows] = useState(4);
+  const [page, setPage] = useState(1);
+  const [query, setQuery] = useState('');
+  const [sortBy, setSortBy] = useState('');
 
   const loadStudentsFromServer = async () => {
     try {
-      const studentsFromServer = await getStudents();
+      const studentsFromServer = await getStudents(page, rows, query, sortBy);
 
       dispatch(setUsersAction(studentsFromServer));
     } catch (error) {
@@ -22,9 +28,11 @@ export const BodyMain: React.FC = () => {
 
   useEffect(() => {
     loadStudentsFromServer();
-  }, []);
+  }, [rows, page, query, sortBy]);
 
   console.log(students);
+  console.log(totalCount);
+  console.log(sortBy);
 
   return (
     <main className="body-main">
@@ -44,6 +52,10 @@ export const BodyMain: React.FC = () => {
                 className="body-main__search"
                 type="text"
                 placeholder="Enter Student Name, Parent or ID here"
+                value={query}
+                onChange={event => {
+                  setQuery(event.target.value);
+                }}
               />
 
               <img
@@ -83,63 +95,88 @@ export const BodyMain: React.FC = () => {
                 />
               </div>
 
-              <a
+              <div
                 className="
                   body-main__header-row-names
                   body-main__header-name"
-                href="#/"
+                onClick={() => {
+                  if (sortBy !== '&sortBy=name&sortDir=-1') {
+                    setSortBy('&sortBy=name&sortDir=-1');
+                  } else {
+                    setSortBy('&sortBy=name&sortDir=1');
+                  }
+                }}
               >
                 <span>Name</span>
                 <img src="./images/sort_by_name.svg" alt="sort by name" />
-              </a>
+              </div>
 
-              <a
+              <div
                 className="
                   body-main__header-row-names
                   body-main__header-id"
-                href="#/"
+                onClick={() => {
+                  setSortBy('');
+                }}
               >
                 <span>ID</span>
                 <img src="./images/up-down.svg" alt="sort by name" />
-              </a>
+              </div>
 
-              <a
+              <div
                 className="
                   body-main__header-row-names
                   body-main__header-class"
-                href="#/"
+                onClick={() => {
+                  if (sortBy !== '&sortBy=class&sortDir=-1') {
+                    setSortBy('&sortBy=class&sortDir=-1');
+                  } else {
+                    setSortBy('&sortBy=class&sortDir=1');
+                  }
+                }}
               >
                 <span>Class</span>
-              </a>
+              </div>
 
-              <a
+              <div
                 className="
                   body-main__header-row-names
                   body-main__header-score"
-                href="#/"
+                onClick={() => {
+                  if (sortBy !== '&sortBy=score&sortDir=-1') {
+                    setSortBy('&sortBy=score&sortDir=-1');
+                  } else {
+                    setSortBy('&sortBy=score&sortDir=1');
+                  }
+                }}
               >
                 <span>Av.Score,%</span>
                 <img src="./images/up-down.svg" alt="sort by name" />
-              </a>
+              </div>
 
-              <a
+              <div
                 className="
                   body-main__header-row-names
                   body-main__header-speed"
-                href="#/"
+                onClick={() => {
+                  if (sortBy !== '&sortBy=speed&sortDir=-1') {
+                    setSortBy('&sortBy=speed&sortDir=-1');
+                  } else {
+                    setSortBy('&sortBy=speed&sortDir=1');
+                  }
+                }}
               >
                 <span>Av.Speed</span>
                 <img src="./images/up-down.svg" alt="sort by name" />
-              </a>
+              </div>
 
-              <a
+              <div
                 className="
                   body-main__header-row-names
                   body-main__header-parents"
-                href="#/"
               >
                 <span>Parents</span>
-              </a>
+              </div>
             </div>
 
             {students.map((student: Student) => (
@@ -153,7 +190,6 @@ export const BodyMain: React.FC = () => {
                     const arrow = document.getElementById(`arrow-${student.id}`);
 
                     if (el && arrow) {
-                      console.log(el.style.height);
                       if (el.style.height === '0px') {
                         el.style.height = `${252 + 35 * student.tests.length}px`;
                         arrow.style.transform = 'rotateZ(180deg)';
@@ -213,9 +249,12 @@ export const BodyMain: React.FC = () => {
                   </span>
 
                   <span
-                    className="
-                    body-main__row
-                    body-main__header-speed"
+                    className={`
+                      body-main__row
+                      body-main__header-speed
+                      ${student.speed === 'Below Expected' && 'color__color--red'}
+                      ${student.speed === 'As Expected' && 'color__color--green'}
+                      ${student.speed === 'Above Expected' && 'color__color--blue'}`}
                   >
                     <span>{student.speed}</span>
                   </span>
@@ -439,7 +478,8 @@ export const BodyMain: React.FC = () => {
 
                       <p
                         className={`
-                        details__average-speed color__color--blue
+                        details__average-speed
+                        color__color--blue
                         ${student.speed === 'Below Expected' && 'color__color--red'}
                         ${student.speed === 'As Expected' && 'color__color--green'}
                         ${student.speed === 'Above Expected' && 'color__color--blue'}`}
@@ -455,18 +495,50 @@ export const BodyMain: React.FC = () => {
 
             <div className="body-main__pages">
               <span className="body-main__pages-rows">Rows per page:</span>
-              <select className="body-main__pages-per" name="rows" id="rows">
+              <select
+                className="body-main__pages-per"
+                name="rows"
+                id="rows"
+                defaultValue={rows}
+                onChange={event => {
+                  setRows(+event.target.value);
+                  setPage(1);
+                }}
+              >
+                <option value="2">2</option>
+                <option value="4">4</option>
                 <option value="5">5</option>
                 <option value="10">10</option>
                 <option value="15">15</option>
                 <option value="20">20</option>
               </select>
 
-              <span className="body-main__pages-items">21-30 of 100</span>
+              <span className="body-main__pages-items">
+                {rows * page - rows + 1}-{rows * page > totalCount
+                  ? totalCount : rows * page} of {totalCount}
+              </span>
 
               <div className="btn__left-right">
-                <img className="btn__arrow" src="./images/btn-left.svg" alt="btn" />
-                <img className="btn__arrow" src="./images/btn-right.svg" alt="btn" />
+                <img
+                  className="btn__arrow"
+                  src="./images/btn-left.svg"
+                  alt="btn"
+                  onClick={() => {
+                    if (page > 1) {
+                      setPage(page - 1);
+                    }
+                  }}
+                />
+                <img
+                  className="btn__arrow"
+                  src="./images/btn-right.svg"
+                  alt="btn"
+                  onClick={() => {
+                    if (rows * page < totalCount) {
+                      setPage(page + 1);
+                    }
+                  }}
+                />
               </div>
 
             </div>
