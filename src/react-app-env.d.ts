@@ -1,11 +1,12 @@
 /// <reference types="react-scripts" />
 
 export interface State {
-  mainData: StateData
+  mainData: StateData,
+  exportData: Student[],
 }
 
 export interface StateData {
-  data: Student[]
+  data: Student[],
   totalCount: number,
   totalPages: number,
 }

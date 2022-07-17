@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
+// import { CSVLink } from "react-csv";
 import { useDispatch, useSelector } from "react-redux";
 import { getStudents } from "../../api/students";
 import { Student } from "../../react-app-env";
-import { setUsersAction } from "../../store";
-import { getCountSelector, getStudentsSelector } from "../../store/selectors";
+import { addExportUsersAction, removeExportUsersAction, setUsersAction } from "../../store";
+import { exportUsersSelector, getCountSelector, getStudentsSelector } from "../../store/selectors";
 import './BodyMain.scss';
 
 export const BodyMain: React.FC = () => {
   const dispatch = useDispatch();
   const students: Student[] = useSelector(getStudentsSelector);
   const totalCount = useSelector(getCountSelector);
+  const usersToCSV = useSelector(exportUsersSelector);
 
   const [rows, setRows] = useState(4);
   const [page, setPage] = useState(1);
@@ -30,9 +32,7 @@ export const BodyMain: React.FC = () => {
     loadStudentsFromServer();
   }, [rows, page, query, sortBy]);
 
-  console.log(students);
-  console.log(totalCount);
-  console.log(sortBy);
+  console.log(usersToCSV);
 
   return (
     <main className="body-main">
@@ -65,20 +65,18 @@ export const BodyMain: React.FC = () => {
               />
             </div>
 
-            <div className="body-main__export-block">
+            {/* <CSVLink
+              className="body-main__export-block"
+            >
               <img
                 className="body-main__upload-image"
                 src="images/upload.svg"
                 alt="upload"
               />
-              <a
-                href="#/"
-                className="body-main__export"
-              >
+              <p className="body-main__export">
                 export csv
-              </a>
-
-            </div>
+              </p>
+            </CSVLink> */}
           </div>
 
           <div className="body-main__main-content">
@@ -181,120 +179,146 @@ export const BodyMain: React.FC = () => {
 
             {students.map((student: Student) => (
               <React.Fragment key={student.id}>
-                <div
-                  className="
+
+                <div className="body-main__rows-container">
+
+                  <div
+                    className="
+                      body-main__header-row-names
+                      body-main__header-row-checkbox">
+                    <input
+                      className="body-main__header-checkbox"
+                      type="checkbox"
+                      checked={usersToCSV.some(user => user.id === student.id)}
+                      onChange={event => {
+                          if (event.target.checked && !usersToCSV.some(user => user.id === student.id)) {
+                            dispatch(addExportUsersAction(student));
+                          } else {
+                            dispatch(removeExportUsersAction(student.id));
+                          }
+                          console.log(usersToCSV);
+                      }}
+                    />
+                  </div>
+
+                  <div
+                    className="
                     body-main__header-row
                     body-main__person"
-                  onClick={() => {
-                    const el = document.getElementById(student.id.toString());
-                    const arrow = document.getElementById(`arrow-${student.id}`);
+                    onClick={() => {
+                      const el = document.getElementById(student.id.toString());
+                      const arrow = document.getElementById(`arrow-${student.id}`);
 
-                    if (el && arrow) {
-                      if (el.style.height === '0px') {
-                        el.style.height = `${252 + 35 * student.tests.length}px`;
-                        arrow.style.transform = 'rotateZ(180deg)';
-                      } else {
-                        el.style.height = '0'
-                        arrow.style.transform = 'rotateZ(0)';
+                      if (el && arrow) {
+                        if (el.style.height === '0px') {
+                          el.style.height = `${252 + 35 * student.tests.length}px`;
+                          arrow.style.transform = 'rotateZ(180deg)';
+                        } else {
+                          el.style.height = '0'
+                          arrow.style.transform = 'rotateZ(0)';
+                        }
                       }
-                    }
-                  }}
-                >
-                  <div
+                    }}
+                  >
+                    {/* <div
                     className="
                     body-main__header-row-names
                     body-main__header-row-checkbox">
                     <input
                       className="body-main__header-checkbox"
                       type="checkbox"
+                      onChange={() => {
+                        dispatch(addExportUsersAction(student));
+                      }}
                     />
-                  </div>
+                  </div> */}
 
-                  <span
-                    className="
+                    <span
+                      className="
                     body-main__row
                     body-main__header-name"
-                  >
-                    <span>{student.name}</span>
-                  </span>
+                    >
+                      <span>{student.name}</span>
+                    </span>
 
-                  <span
-                    className="
+                    <span
+                      className="
                     body-main__row
                     body-main__header-id"
-                  >
-                    <span>{student.id}</span>
-                  </span>
+                    >
+                      <span>{student.id}</span>
+                    </span>
 
-                  <span
-                    className="
+                    <span
+                      className="
                     body-main__row
                     body-main__header-class"
-                  >
-                    <span>{student.class}</span>
-                  </span>
+                    >
+                      <span>{student.class}</span>
+                    </span>
 
-                  <span
-                    className={`
+                    <span
+                      className={`
                       body-main__row
                       body-main__header-score
                     ${+student.score.slice(0, -1) < 50 && 'color__color--red'}
                     ${(+student.score.slice(0, -1) >= 50)
-                      && (+student.score.slice(0, -1) < 80) && 'color__color--orange'}
+                        && (+student.score.slice(0, -1) < 80) && 'color__color--orange'}
                     ${(+student.score.slice(0, -1) >= 80)
-                      && (+student.score.slice(0, -1) < 90) && 'color__color--green'}
+                        && (+student.score.slice(0, -1) < 90) && 'color__color--green'}
                     ${+student.score.slice(0, -1) >= 90 && 'color__color--blue'}`}
-                  >
-                    <span>{student.score}</span>
-                  </span>
+                    >
+                      <span>{student.score}</span>
+                    </span>
 
-                  <span
-                    className={`
+                    <span
+                      className={`
                       body-main__row
                       body-main__header-speed
                       ${student.speed === 'Below Expected' && 'color__color--red'}
                       ${student.speed === 'As Expected' && 'color__color--green'}
                       ${student.speed === 'Above Expected' && 'color__color--blue'}`}
-                  >
-                    <span>{student.speed}</span>
-                  </span>
+                    >
+                      <span>{student.speed}</span>
+                    </span>
 
-                  <span
-                    className="
+                    <span
+                      className="
                     body-main__row
                     body-main__header-parents"
-                  >
-                    <div
-                      className="body-main__header-parents-container"
                     >
+                      <div
+                        className="body-main__header-parents-container"
+                      >
+                        <img
+                          src="./images/info.svg"
+                          alt="info"
+                          className="body-main__info-img"
+                        />
+
+                        <span>
+                          {student.parents.map(parent => (
+                            <span
+                              key={parent}
+                            >
+                              {`${parent}${parent !== student
+                                .parents[student.parents.length - 1] ? ', ' : ''} `}
+                            </span>
+
+                          ))}
+                        </span>
+                      </div>
+
                       <img
-                        src="./images/info.svg"
-                        alt="info"
-                        className="body-main__info-img"
+                        className="body-main__header-arrow"
+                        id={`arrow-${student.id}`}
+                        src="./images/arrow_down.png" alt="button"
+                        style={{
+                          transform: 'rotateZ(0)',
+                        }}
                       />
-
-                      <span>
-                        {student.parents.map(parent => (
-                          <span
-                            key={parent}
-                          >
-                            {`${parent}${parent !== student
-                              .parents[student.parents.length - 1] ? ', ' : ''} `}
-                          </span>
-
-                        ))}
-                      </span>
-                    </div>
-
-                    <img
-                      className="body-main__header-arrow"
-                      id={`arrow-${student.id}`}
-                      src="./images/arrow_down.png" alt="button"
-                      style={{
-                        transform: 'rotateZ(0)',
-                      }}
-                    />
-                  </span>
+                    </span>
+                  </div>
                 </div>
 
                 <div
