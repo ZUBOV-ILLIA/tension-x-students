@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-// import { CSVLink } from "react-csv";
+import { CSVLink } from "react-csv";
 import { useDispatch, useSelector } from "react-redux";
 import { getStudents } from "../../api/students";
 import { Student } from "../../react-app-env";
@@ -18,6 +18,8 @@ export const BodyMain: React.FC = () => {
   const [query, setQuery] = useState('');
   const [sortBy, setSortBy] = useState('');
 
+  const [checkboxesList, setCheckboxesList] = useState<number[]>([]);
+
   const loadStudentsFromServer = async () => {
     try {
       const studentsFromServer = await getStudents(page, rows, query, sortBy);
@@ -28,11 +30,25 @@ export const BodyMain: React.FC = () => {
     }
   }
 
+  const csvReport = {
+    filename: 'Students-list.csv',
+    headers: [
+      { label: 'Full Name', key: 'name' },
+      { label: 'Class', key: 'class' },
+      { label: 'Score', key: 'score' },
+      { label: 'Speed', key: 'speed' },
+      { label: 'Parents', key: 'parents' },
+      { label: 'ID', key: 'id' },
+    ],
+    data: usersToCSV,
+  }
+
   useEffect(() => {
     loadStudentsFromServer();
   }, [rows, page, query, sortBy]);
 
-  console.log(usersToCSV);
+
+  console.log(checkboxesList, '<list');
 
   return (
     <main className="body-main">
@@ -65,7 +81,8 @@ export const BodyMain: React.FC = () => {
               />
             </div>
 
-            {/* <CSVLink
+            <CSVLink
+              {...csvReport}
               className="body-main__export-block"
             >
               <img
@@ -76,7 +93,7 @@ export const BodyMain: React.FC = () => {
               <p className="body-main__export">
                 export csv
               </p>
-            </CSVLink> */}
+            </CSVLink>
           </div>
 
           <div className="body-main__main-content">
@@ -90,8 +107,14 @@ export const BodyMain: React.FC = () => {
                 <input
                   className="body-main__header-checkbox"
                   type="checkbox"
+                  onChange={() => {
+
+                  }}
                 />
               </div>
+              {/* ==================================================================================== */}
+              {/* ==================================================================================== */}
+              {/* ==================================================================================== */}
 
               <div
                 className="
@@ -182,21 +205,27 @@ export const BodyMain: React.FC = () => {
 
                 <div className="body-main__rows-container">
 
+                  {/* ======================================================================================================================================== */}
+                  {/* ======================================================================================================================================== */}
+                  {/* ======================================================================================================================================== */}
                   <div
                     className="
                       body-main__header-row-names
                       body-main__header-row-checkbox">
                     <input
+                      id={`checkbox-${student.id}`}
                       className="body-main__header-checkbox"
                       type="checkbox"
+                      name="student-checkbox"
                       checked={usersToCSV.some(user => user.id === student.id)}
                       onChange={event => {
-                          if (event.target.checked && !usersToCSV.some(user => user.id === student.id)) {
-                            dispatch(addExportUsersAction(student));
-                          } else {
-                            dispatch(removeExportUsersAction(student.id));
-                          }
-                          console.log(usersToCSV);
+                        if (event.target.checked && !usersToCSV.some(user => user.id === student.id)) {
+                          dispatch(addExportUsersAction(student));
+                          setCheckboxesList([...checkboxesList, student.id]);
+                        } else {
+                          dispatch(removeExportUsersAction(student.id));
+                          setCheckboxesList([...checkboxesList.filter(checkbox => checkbox !== student.id)]);
+                        }
                       }}
                     />
                   </div>

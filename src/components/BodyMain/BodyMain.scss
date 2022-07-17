@@ -47,7 +47,15 @@
     display: flex;
     align-items: center;
     gap: 8px;
+    text-decoration: none;
     cursor: pointer;
+
+    border-bottom: 1px solid transparent;
+    transition: border 0.4s linear;
+
+    &:hover {
+      border-bottom: 1px solid #777;
+    }
   }
 
   &__export {
@@ -66,9 +74,9 @@
   &__person {
     background-color: #fff;
     cursor: pointer;
-    
+
     transition: background-color 0.3s linear;
-    
+
     &:first-child {
       background-color: rgb(253, 8, 8);
     }
@@ -200,7 +208,7 @@
   &__arrow {
     cursor: pointer;
     transition: transform 0.3s linear;
-    
+
     &:hover {
       transform: scale(1.2);
     }
@@ -214,7 +222,7 @@
   overflow: hidden;
   background-color: #F2F2F2;
   transition: 0.4s linear;
-  
+
   &__inner {
     padding: 20px 60px;
   }
