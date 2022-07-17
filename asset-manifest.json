@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/tension-x-students/static/css/main.d8f55758.css",
-    "main.js": "/tension-x-students/static/js/main.bfc19da5.js",
+    "main.css": "/tension-x-students/static/css/main.b9f69d55.css",
+    "main.js": "/tension-x-students/static/js/main.f8fda33b.js",
     "index.html": "/tension-x-students/index.html",
-    "main.d8f55758.css.map": "/tension-x-students/static/css/main.d8f55758.css.map",
-    "main.bfc19da5.js.map": "/tension-x-students/static/js/main.bfc19da5.js.map"
+    "main.b9f69d55.css.map": "/tension-x-students/static/css/main.b9f69d55.css.map",
+    "main.f8fda33b.js.map": "/tension-x-students/static/js/main.f8fda33b.js.map"
   },
   "entrypoints": [
-    "static/css/main.d8f55758.css",
-    "static/js/main.bfc19da5.js"
+    "static/css/main.b9f69d55.css",
+    "static/js/main.f8fda33b.js"
   ]
 }
