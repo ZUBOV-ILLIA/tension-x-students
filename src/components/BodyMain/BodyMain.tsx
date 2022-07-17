@@ -47,9 +47,6 @@ export const BodyMain: React.FC = () => {
     loadStudentsFromServer();
   }, [rows, page, query, sortBy]);
 
-
-  console.log(checkboxesList, '<list');
-
   return (
     <main className="body-main">
       <div className="container">
@@ -107,15 +104,8 @@ export const BodyMain: React.FC = () => {
                 <input
                   className="body-main__header-checkbox"
                   type="checkbox"
-                  onChange={() => {
-
-                  }}
                 />
               </div>
-              {/* ==================================================================================== */}
-              {/* ==================================================================================== */}
-              {/* ==================================================================================== */}
-
               <div
                 className="
                   body-main__header-row-names
@@ -204,10 +194,6 @@ export const BodyMain: React.FC = () => {
               <React.Fragment key={student.id}>
 
                 <div className="body-main__rows-container">
-
-                  {/* ======================================================================================================================================== */}
-                  {/* ======================================================================================================================================== */}
-                  {/* ======================================================================================================================================== */}
                   <div
                     className="
                       body-main__header-row-names
@@ -249,18 +235,6 @@ export const BodyMain: React.FC = () => {
                       }
                     }}
                   >
-                    {/* <div
-                    className="
-                    body-main__header-row-names
-                    body-main__header-row-checkbox">
-                    <input
-                      className="body-main__header-checkbox"
-                      type="checkbox"
-                      onChange={() => {
-                        dispatch(addExportUsersAction(student));
-                      }}
-                    />
-                  </div> */}
 
                     <span
                       className="
@@ -313,8 +287,8 @@ export const BodyMain: React.FC = () => {
 
                     <span
                       className="
-                    body-main__row
-                    body-main__header-parents"
+                      body-main__row
+                      body-main__header-parents"
                     >
                       <div
                         className="body-main__header-parents-container"
